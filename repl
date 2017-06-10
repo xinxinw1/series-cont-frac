@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+if command -v rlwrap >/dev/null 2>&1; then
+  sbcl="rlwrap sbcl"
+else
+  sbcl="sbcl"
+fi
+
+$sbcl --noinform --load lib/series.lisp
