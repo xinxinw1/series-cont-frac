@@ -18,6 +18,17 @@
 (defun fact (n)
   (fact-k n 1))
 
+; rising factorial, (poch x n) = x(x+1)...(x+n-1)  (n terms)
+(defun poch (x n)
+  (if (<= n 0) 1
+      (* x (poch (+ x 1) (- n 1)))))
+      
+(defun conv (f g)
+  (lambda (n) (loop for i from 0 to n sum (* (funcall f i) (funcall g (- n i))))))
+
+(defun sum (f)
+  (conv f (lambda (n) (progn n 1))))
+
 (defun get-first-unmarked-after (p arr)
   (let ((start (if p p 2)))
     (loop for i from start below (length arr) do
@@ -37,6 +48,16 @@
                    (mark-all-multiples p arr)))))))
 
 (defparameter *primes* (prime-sieve 1000))
+
+(defun count-divisors (n)
+  (let ((arr (make-array (+ n 1) :initial-element 0)))
+    (loop for i from 1 to n do
+      (loop for j from 1 to n do
+        (let ((num (* i j)))
+          (if (<= num n) (incf (elt arr num))))))
+    arr))
+
+(defparameter *divisors* (count-divisors 1000))
 
 (defun make-b (c)
   (let ((cm (memoize c)))
