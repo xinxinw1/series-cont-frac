@@ -253,7 +253,9 @@
   `(loop for n from 1 to ,end collect (progn n ,expr)))
 
 (defun gen-fn (c end)
-  (map 'cons (make-b c) (loop for n from 1 to end collect n)))
+  (let ((prev 1) (b (make-b c)))
+    (loop for n from 1 to end until (eq prev 0) collect
+      (setf prev (funcall b n)))))
 
 ; use progn to suppress style-warning if n is not used
 (defmacro gen (expr end)
